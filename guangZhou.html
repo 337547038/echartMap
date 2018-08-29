@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="main" style="width: 800px;height: 600px"></div>
+<script type="text/javascript" src="js/echarts.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+
+<script>
+  function randomData() {
+    return Math.round(Math.random() * 500);
+  }
+
+  var mydata = [
+    {name: '荔湾区', value: '100'},
+    {name: '越秀区', value: randomData()},
+    {name: '海珠区', value: randomData()},
+    {name: '天河区', value: randomData()},
+    {name: '白云区', value: randomData()},
+    {name: '黄埔区', value: randomData()},
+    {name: '番禺区', value: randomData()},
+    {name: '花都区', value: randomData()},
+    {name: '南沙区', value: randomData()},
+    {name: '从化区', value: randomData()},
+    {name: '增城区', value: randomData()}
+  ]
+  $.get('echarts/map/440100.json', function (geoJson) {
+    //console.log(geoJson)
+    echarts.registerMap('广州市', geoJson);
+
+    var option_map = {
+      tooltip: {
+        trigger: 'item',
+        formatter: function (params) {
+          if (params.name) {
+            var value = params.value || 0;
+            return typeof value !== 'object' ? params.name + '<br>' + "提示 : " + value : params.name;
+          }
+        }
+      },
+      visualMap: {
+        type: 'continuous',
+        show: false,
+        min: 0,
+        max: 500,
+        left: 'left',
+        top: 'bottom',
+        text: ['高', '低'],
+        calculable: true,
+       // seriesIndex: [1],
+        inRange: {
+          //color: ['#dcc5fe', '#b592e9', '#a286ce', '#997dc2', '#7250a6']
+          color: ['#FFFFFF', '#0099FF']
+        }
+      },
+      geo: {
+        map: '广州市',
+        roam: false
+      },
+      series: [{
+        type: 'map',
+        mapType: '广州市',
+        roam: false,
+        label: {
+          normal: {
+            show: true,
+            position: 'inside',
+            textStyle: {
+              color: '#000000'
+            }
+          },
+          emphasis: {
+            show: true
+          }
+        },
+        itemStyle: {
+          normal: {
+            borderColor: 'transparent',
+          }
+        },
+        data: mydata
+      }]
+    };
+    var myChart = echarts.init(document.getElementById('main'));
+    //使用制定的配置项和数据显示图表
+    myChart.setOption(option_map)
+  });
+</script>
+</body>
+</html>
