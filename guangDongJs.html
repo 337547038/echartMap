@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="main" style="width: 800px;height: 600px"></div>
+<script type="text/javascript" src="js/echarts.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="allMap/js/guangdong.js"></script>
+
+<script>
+    function randomData() {
+        return Math.round(Math.random() * 500);
+    }
+
+    var mydata = [
+        {name: '广州市', value: '100'},
+        {name: '韶关市', value: randomData()},
+        {name: '深圳市', value: randomData()},
+        {name: '珠海市', value: randomData()},
+        {name: '佛山市', value: randomData()},
+        {name: '汕头市', value: randomData()},
+        {name: '湛江市', value: randomData()},
+        {name: '江门市', value: randomData()},
+        {name: '惠州市', value: randomData()},
+        {name: '茂名市', value: randomData()},
+        {name: '梅州市', value: randomData()},
+        {name: '肇庆市', value: randomData()},
+        {name: '汕尾市', value: 0},
+        {name: '河源市', value: randomData()},
+        {name: '清远市', value: randomData()},
+        {name: '阳江市', value: randomData()},
+        {name: '中山市', value: randomData()},
+        {name: '东莞市', value: randomData()},
+        {name: '揭阳市', value: randomData()},
+        {name: '潮州市', value: randomData()},
+        {name: '云浮市', value: randomData()}
+    ]
+    //$.get('echarts/map/guangdong.json', function (geoJson) {
+    //console.log(geoJson)
+    // echarts.registerMap('广东', geoJson);
+
+    // 可从这里提取每个城市对应的json
+
+    var option_map = {
+        tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+                if (params.name) {
+                    var value = params.value || 0;
+                    return typeof value !== 'object' ? params.name + '<br>' + "提示 : " + value : params.name;
+                }
+            }
+        },
+        visualMap: {
+            type: 'continuous',
+            show: false,
+            min: 0,
+            max: 500,
+            left: 'left',
+            top: 'bottom',
+            text: ['高', '低'],
+            calculable: true,
+            // seriesIndex: [1],
+            inRange: {
+                //color: ['#dcc5fe', '#b592e9', '#a286ce', '#997dc2', '#7250a6']
+                color: ['#FFFFFF', '#0099FF']
+            }
+        },
+        geo: {
+            map: '广东',
+            roam: false
+        },
+        series: [{
+            type: 'map',
+            mapType: '广东',
+            roam: false,
+            label: {
+                normal: {
+                    show: true,
+                    position: 'inside',
+                    textStyle: {
+                        color: '#000000'
+                    }
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    borderColor: 'transparent',
+                }
+            },
+            data: mydata
+        }]
+    };
+    var myChart = echarts.init(document.getElementById('main'));
+    //使用制定的配置项和数据显示图表
+    myChart.setOption(option_map);
+    myChart.on('click', function (params) {
+        // 通过点击事件下钻到下级
+        console.log(params)
+    })
+    //});
+</script>
+</body>
+</html>
